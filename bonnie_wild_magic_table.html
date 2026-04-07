@@ -1,0 +1,582 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonnie's Wild Magic Table</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&amp;family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #0f0f1a;
+    --border: #2a1a3a;
+    --accent: #8b3a8b;
+    --accent2: #4a0a6a;
+    --gold: #c9a96e;
+    --gold-dim: #7a5f35;
+    --text: #d4c5e2;
+    --text-dim: #7a6a8a;
+    --danger: #8b1a1a;
+    --danger-bright: #cc2222;
+    --raven: #1a0a2a;
+    --white: #f0eaf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Background atmosphere */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(80, 10, 120, 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(120, 10, 10, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 60%, rgba(40, 10, 80, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .header-eyebrow {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(139, 58, 139, 0.4);
+  }
+
+  .header-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 auto;
+    max-width: 400px;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  .divider-rune {
+    color: var(--accent);
+    font-size: 18px;
+    opacity: 0.7;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .legend-dot.catastrophic { background: var(--danger-bright); box-shadow: 0 0 6px var(--danger-bright); }
+  .legend-dot.dark { background: var(--accent); }
+  .legend-dot.neutral { background: var(--gold-dim); }
+  .legend-dot.raven { background: #aaaaff; }
+
+  /* Table */
+  .table-wrapper {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: 0 0 60px rgba(80, 10, 120, 0.1), inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    background: linear-gradient(135deg, #1a0a2a, #0f0f1a);
+    border-bottom: 1px solid var(--border);
+  }
+
+  thead th {
+    padding: 14px 20px;
+    text-align: left;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  thead th:first-child {
+    width: 80px;
+    text-align: center;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(42, 26, 58, 0.5);
+    transition: background 0.15s ease;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr:hover {
+    background: rgba(139, 58, 139, 0.05);
+  }
+
+  td {
+    padding: 11px 20px;
+    vertical-align: top;
+  }
+
+  td:first-child {
+    text-align: center;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    width: 80px;
+    white-space: nowrap;
+  }
+
+  td:last-child {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Row types */
+  tr.catastrophic {
+    background: rgba(100, 10, 10, 0.12);
+  }
+  tr.catastrophic:hover {
+    background: rgba(100, 10, 10, 0.2);
+  }
+  tr.catastrophic td:first-child {
+    color: var(--danger-bright);
+    text-shadow: 0 0 8px rgba(200, 30, 30, 0.5);
+  }
+  tr.catastrophic td:last-child {
+    color: #e0b0b0;
+  }
+
+  tr.dark td:first-child {
+    color: #b070d0;
+  }
+
+  tr.neutral td:first-child {
+    color: var(--gold);
+  }
+
+  tr.raven {
+    background: rgba(20, 10, 40, 0.6);
+    border-top: 1px solid rgba(139, 58, 139, 0.3);
+    border-bottom: 1px solid rgba(139, 58, 139, 0.3);
+  }
+  tr.raven td:first-child {
+    color: #aaaaff;
+    text-shadow: 0 0 12px rgba(150, 150, 255, 0.6);
+  }
+  tr.raven td:last-child {
+    color: var(--white);
+    font-style: italic;
+    font-size: 15px;
+  }
+
+  /* Section headers */
+  tr.section-header td {
+    background: linear-gradient(90deg, rgba(42, 26, 58, 0.8), rgba(20, 10, 30, 0.4));
+    padding: 8px 20px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    cursor: default;
+  }
+
+  tr.section-header:hover {
+    background: transparent;
+  }
+
+  tr.section-header td:first-child {
+    font-family: 'Cinzel Decorative', cursive;
+    color: var(--gold-dim);
+    font-size: 10px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+
+  .footer span {
+    color: var(--accent);
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: white; color: black; }
+    body::before { display: none; }
+    .table-wrapper { border: 1px solid #ccc; box-shadow: none; }
+    thead tr { background: #f0f0f0; }
+    thead th { color: #333; }
+    td { color: #111; }
+    tr.catastrophic { background: #fff0f0; }
+    tr.catastrophic td:first-child { color: #cc0000; }
+    tr.raven { background: #f5f0ff; }
+  }
+  /* Dice Roller — Fixed */
+  .roller {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .roll-history {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .history-item {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    background: rgba(15, 15, 26, 0.9);
+    border: 1px solid var(--border);
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .history-item:hover { opacity: 1; cursor: pointer; }
+  .history-item.catastrophic { color: var(--danger-bright); border-color: var(--danger); }
+  .history-item.dark { color: #b070d0; }
+  .history-item.neutral { color: var(--gold); }
+  .history-item.raven { color: #aaaaff; border-color: #aaaaff; }
+
+  .roll-btn {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    background: rgba(15, 15, 26, 0.95);
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  .roll-btn:hover {
+    background: rgba(201, 169, 110, 0.1);
+    border-color: var(--gold);
+  }
+
+  .roll-result {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 32px;
+    text-align: center;
+    min-width: 80px;
+    padding: 8px 16px;
+    background: rgba(15, 15, 26, 0.95);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  .roll-result.catastrophic { color: var(--danger-bright); border-color: var(--danger); }
+  .roll-result.dark { color: #b070d0; }
+  .roll-result.neutral { color: var(--gold); }
+  .roll-result.raven { color: #aaaaff; border-color: #aaaaff; }
+
+  tr.highlighted {
+    outline: 2px solid var(--accent);
+    background: rgba(139, 58, 139, 0.15) !important;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-eyebrow">d100 · Fallen Kingdom</div>
+    <h1>Bonnie's Wild Magic</h1>
+    <div class="header-sub">Daughter of The First God &amp; the Raven Queen · God in a Mortal Body</div>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-rune">🪶</div>
+      <div class="divider-line"></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot catastrophic"></div> 1–19 Catastrophic</div>
+    <div class="legend-item"><div class="legend-dot dark"></div> 20–79 Dark / Strange</div>
+    <div class="legend-item"><div class="legend-dot neutral"></div> 80–99 Volatile Power</div>
+    <div class="legend-item"><div class="legend-dot raven"></div> 100 The Raven Queen</div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Roll</th>
+          <th>Effect</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr class="section-header"><td colspan="2">Catastrophic — 1 to 19</td></tr>
+
+        <tr class="catastrophic"><td>1</td><td>Every living creature within 60 feet must make a DC 22 Constitution saving throw or drop to 0 hit points. Bonnie is unaffected.</td></tr>
+        <tr class="catastrophic"><td>2</td><td>A rift tears open beneath Bonnie. Every creature within 15 feet falls into the Shadowfell. They return to the exact spot 1 minute later, each having aged 10 years. The aging is permanent.</td></tr>
+        <tr class="catastrophic"><td>3</td><td>The Fate speaks through Bonnie. She has no memory of what he says. </td></tr>
+        <tr class="catastrophic"><td>4</td><td>The spell fires in reverse — it targets Bonnie instead of its intended target, at double power.</td></tr>
+        <tr class="catastrophic"><td>5</td><td>All healing magic within 1 mile stops working for 1 hour. No saves, no exceptions.</td></tr>
+        <tr class="catastrophic"><td>6</td><td>The nearest creature to Bonnie must make a DC 20 Constitution saving throw or die instantly. Their soul is pulled toward Bonnie's hands and disperses — they cannot be resurrected by anything below a Wish. On a success, they drop to 1 hit point instead.</td></tr>
+        <tr class="catastrophic"><td>7</td><td>Bonnie's body begins to dissolve into shadow. She has 3 rounds to end the effect by succeeding on a DC 18 Constitution saving throw each round. If she fails all three she becomes incorporeal permanently until a 9th-level Remove Curse is cast on her.</td></tr>
+        <tr class="catastrophic"><td>8</td><td>Every corpse within 1 mile animates and begins moving toward Bonnie. They don't stop until destroyed or until Bonnie moves more than 1 mile away.</td></tr>
+        <tr class="catastrophic"><td>9</td><td>The ground in a 40 foot radius around Bonnie becomes a dead zone. All creatures that die within it cannot be resurrected by any means for 100 years.</td></tr>
+        <tr class="catastrophic"><td>10</td><td>Time stops for everyone except Bonnie and her allies for 1 minute. Bonnie and her party can move and act freely. All other creatures are frozen. Should any damage be dealt or taken, the effect ends. When time resumes, no one else is aware anything happened.</td></tr>
+        <tr class="catastrophic"><td>11</td><td>Bonnie's shadow detaches and goes berserk for 1 minute. It attacks everything in range using her spell attack modifier and deals 4d10 necrotic per hit. It has her hit point maximum. She cannot control or communicate with it.</td></tr>
+        <tr class="catastrophic"><td>12</td><td>A DC 16 Charisma saving throw radiates from Bonnie in a 30 foot radius. Anyone who fails is convinced they are already dead for 1 hour. They take no actions. They don't respond to anything. They just wait.</td></tr>
+        <tr class="catastrophic"><td>13</td><td>Every light source within 500 feet is permanently destroyed. Not suppressed — destroyed. Magical light sources must be recast. Torches are ash.</td></tr>
+        <tr class="catastrophic"><td>14</td><td>The spell Bonnie casts works perfectly. Then The Fate's voice says her name from somewhere that has no location. Every creature within 60 feet that hears it must succeed on a DC 17 Wisdom saving throw or be frightened of Bonnie for 24 hours.</td></tr>
+        <tr class="catastrophic"><td>15</td><td>Bonnie ages 30 years instantly. Her power ages with her — all her spell save DCs and spell attack modifiers increase by 3 for 1 hour, after which she returns to her normal age.</td></tr>
+        <tr class="catastrophic"><td>16</td><td>A wave of pure necrotic energy expands from Bonnie in a 50 foot radius. Every creature must make a DC 20 Constitution saving throw, taking 8d10 necrotic damage on a failed save or half on a success. Bonnie absorbs all damage dealt as temporary hit points.</td></tr>
+        <tr class="catastrophic"><td>17</td><td>All party members gain advantage on all saving throws until the end of their next turn. Bonnie takes 4d10 necrotic damage as the protective energy tears through her.</td></tr>
+        <tr class="catastrophic"><td>18</td><td>The spell fires at its intended target and at Bonnie simultaneously.</td></tr>
+        <tr class="catastrophic"><td>19</td><td>Ravens fill the sky above wherever Bonnie is standing. Thousands of them. They blot out the sun for 1 hour in a 1 mile radius. During this time all undead within the area have advantage on all rolls.</td></tr>
+
+        <tr class="section-header"><td colspan="2">Dark &amp; Strange — 20 to 59</td></tr>
+
+        <tr class="dark"><td>20</td><td>The spell misfires harmlessly. Bonnie takes 1d6 necrotic damage. A single raven lands on her shoulder, looks at her, and flies away.</td></tr>
+        <tr class="dark"><td>21</td><td>Bonnie's eyes go black for 1 minute. She can see every creature within 60 feet regardless of invisibility or darkness, but cannot distinguish ally from enemy.</td></tr>
+        <tr class="dark"><td>22</td><td>The spell fires twice — once at the intended target, once at a random creature within range chosen by the DM.</td></tr>
+        <tr class="dark"><td>23</td><td>All creatures within 30 feet must make a DC 14 Wisdom saving throw or hear a whispered catalogue of the most likely ways they will die — specific, plausible, personal. Frightened for 1 minute on a failed save.</td></tr>
+        <tr class="dark"><td>24</td><td>Bonnie phases partially into the Shadowfell for 1 round. She is incorporeal — cannot be targeted or deal damage — but can observe everything around her.</td></tr>
+        <tr class="dark"><td>25</td><td>The nearest corpse within 300 feet animates and walks to Bonnie. It doesn't attack. It stands behind her until she moves more than 100 feet away, then collapses.</td></tr>
+        <tr class="dark"><td>26</td><td>All healing within 30 feet of Bonnie is halved for 10 minutes.</td></tr>
+        <tr class="dark"><td>27</td><td>The spell fires normally. A crack of necrotic energy splits the ground beneath the target, dealing an additional 2d8 necrotic damage.</td></tr>
+        <tr class="dark"><td>28</td><td>Bonnie's voice drops two octaves for 1 hour. Creatures she speaks to directly must make a DC 13 Charisma saving throw or be charmed by her — they cannot attack her, she has advantage on Charisma checks against them, and the effect ends immediately if she or her allies deal damage to them.</td></tr>
+        <tr class="dark"><td>29</td><td>Each party member within 30 feet gains temporary hit points equal to Bonnie's spellcasting modifier + her proficiency bonus. The temporary hit points last until the end of the next long rest.</td></tr>
+        <tr class="dark"><td>30</td><td>The spell fires at half power. Shadows pool around Bonnie's feet for 1 hour, following her movements.</td></tr>
+        <tr class="dark"><td>31</td><td>Bonnie becomes invisible to undead for 1 hour. They cannot perceive her by any means.</td></tr>
+        <tr class="dark"><td>32</td><td>A 10 foot radius of antimagic surrounds Bonnie for 1 minute. Her own spells are suppressed too.</td></tr>
+        <tr class="dark"><td>33</td><td>Bonnie's shadow detaches and flees. She cannot cast spells until she catches it. The shadow moves at her speed, always just out of reach, and attempts to hide behind other creatures and objects. It has no hit points and cannot be attacked — only caught with a successful grapple check.</td></tr>
+        <tr class="dark"><td>34</td><td>Bonnie can speak to the dead for 1 hour without casting a spell. Any corpse she addresses will answer three questions truthfully.</td></tr>
+        <tr class="dark"><td>35</td><td>All creatures within 30 feet take 2d10 necrotic damage. Bonnie heals for the total amount.</td></tr>
+        <tr class="dark"><td>36</td><td>The spell fires normally. A second identical spell fires from an unknown origin point targeting a random creature within range.</td></tr>
+        <tr class="dark"><td>37</td><td>Ravens gather and circle above Bonnie for 1 hour. They follow her wherever she goes. Indoors, they appear at windows.</td></tr>
+        <tr class="dark"><td>38</td><td>One creature Bonnie can see must succeed on a DC 15 Constitution saving throw or their hit point maximum is reduced by 10 until they finish a long rest.</td></tr>
+        <tr class="dark"><td>39</td><td>The spell fires at double range.</td></tr>
+        <tr class="dark"><td>40</td><td>Bonnie can see the threads of fate connecting every creature within 60 feet for 1 minute. She knows which ones are near death and can communicate what she sees to her allies.</td></tr>
+        <tr class="dark"><td>41</td><td>All sound disappears in a 30 foot radius around Bonnie for 1 minute.</td></tr>
+        <tr class="dark"><td>42</td><td>The spell fires. All creatures within 10 feet of the target take half the spell's damage as necrotic splash.</td></tr>
+        <tr class="dark"><td>43</td><td>Bonnie's next spell automatically critically succeeds on its attack roll or forces the target to roll their saving throw with disadvantage.</td></tr>
+        <tr class="dark"><td>44</td><td>A spectral raven made of black flame appears and attacks a random creature within 60 feet. It has 30 hit points, deals 3d8 necrotic damage on hit, and disappears after 1 minute or when destroyed.</td></tr>
+        <tr class="dark"><td>45</td><td>Corpses churn up through the ground within 20 feet of Bonnie, creating difficult terrain for 1 hour. The corpses are not animated — they simply push through the earth and lie still, filling the area with grasping half-buried bodies.</td></tr>
+        <tr class="dark"><td>46</td><td>Bonnie's spell slot is not expended. The spell fires normally.</td></tr>
+        <tr class="dark"><td>47</td><td>All creatures within 30 feet must make a DC 13 Constitution saving throw or become poisoned for 1 hour as necrotic energy taints the air.</td></tr>
+        <tr class="dark"><td>48</td><td>Bonnie is outlined in black flame for 1 minute. She sheds dim light in a 10 foot radius and has advantage on Intimidation checks.</td></tr>
+        <tr class="dark"><td>49</td><td>The spell fires at the intended target and one additional target of Bonnie's choice within range.</td></tr>
+        <tr class="dark"><td>50</td><td>Time stutters. Everyone within 15 feet of Bonnie must make a DC 14 Wisdom saving throw or be incapacitated for 1 round as they experience a flash of their own death.</td></tr>
+        <tr class="dark"><td>51</td><td>Bonnie's spell fires normally. The target also gains one level of exhaustion.</td></tr>
+        <tr class="dark"><td>52</td><td>Darkness fills a 15 foot radius around Bonnie for 1 minute. She can see through it. No one else can.</td></tr>
+        <tr class="dark"><td>53</td><td>The spell fires normally. All party members within 30 feet can immediately use their reaction to move up to their full speed without provoking opportunity attacks.</td></tr>
+        <tr class="dark"><td>54</td><td>All creatures that Bonnie can see with fewer than half their hit points remaining are frightened of her for 1 minute, no save.</td></tr>
+        <tr class="dark"><td>55</td><td>Bonnie's hair goes white for 24 hours. The spell fires at full power.</td></tr>
+        <tr class="dark"><td>56</td><td>One random creature within 60 feet is marked by death. The next time they take damage, they take an additional 4d10 necrotic. The mark lasts 1 hour.</td></tr>
+        <tr class="dark"><td>57</td><td>The spell fires. Bonnie ages 5 years. It reverses after 24 hours.</td></tr>
+        <tr class="dark"><td>58</td><td>Bonnie can see invisible creatures for 1 hour.</td></tr>
+        <tr class="dark"><td>59</td><td>The spell fires normally. Black feathers rain from the sky for 1 minute in a 30 foot radius. They vanish after landing.</td></tr>
+
+        <tr class="section-header"><td colspan="2">Volatile Power — 60 to 99</td></tr>
+
+        <tr class="neutral"><td>60</td><td>All undead within 1 mile are aware of Bonnie's exact location for 1 hour.</td></tr>
+        <tr class="neutral"><td>61</td><td>The spell fires at triple power. Bonnie takes 4d10 necrotic damage.</td></tr>
+        <tr class="neutral"><td>62</td><td>A door to the Shadowfell opens within 10 feet of Bonnie. It stays open for 1 minute. Anything can walk through it in either direction.</td></tr>
+        <tr class="neutral"><td>63</td><td>Bonnie's next three spells cost no spell slots.</td></tr>
+        <tr class="neutral"><td>64</td><td>All creatures within 30 feet must make a DC 14 Wisdom saving throw or be unable to speak for 1 minute.</td></tr>
+        <tr class="neutral"><td>65</td><td>The spell fires. The target must also succeed on a DC 15 Wisdom saving throw or be paralyzed for 1 round.</td></tr>
+        <tr class="neutral"><td>66</td><td>Bonnie becomes immune to necrotic damage for 1 hour.</td></tr>
+        <tr class="neutral"><td>67</td><td>The spell fires normally. A ghostly version of the target appears beside them and mimics their movements for 1 minute before fading.</td></tr>
+        <tr class="neutral"><td>68</td><td>All creatures within 30 feet regain hit points equal to 2d10. Bonnie loses the same amount.</td></tr>
+        <tr class="neutral"><td>69</td><td>The spell fires. Its damage type changes to necrotic regardless of what it was originally.</td></tr>
+        <tr class="neutral"><td>70</td><td>Bonnie's eyes glow silver for 1 hour. She has truesight to 30 feet.</td></tr>
+        <tr class="neutral"><td>71</td><td>The spell fires normally. A second casting of the same spell is stored — Bonnie can release it as a bonus action within the next minute.</td></tr>
+        <tr class="neutral"><td>72</td><td>All creatures within 20 feet of the target take 2d6 necrotic damage as death energy bleeds outward from the impact.</td></tr>
+        <tr class="neutral"><td>73</td><td>Bonnie floats 3 feet off the ground for 1 hour. She cannot be forced prone.</td></tr>
+        <tr class="neutral"><td>74</td><td>The spell fires normally. The target has disadvantage on their next saving throw regardless of what caused it.</td></tr>
+        <tr class="neutral"><td>75</td><td>One creature Bonnie can see is frozen in place — paralyzed for 1 round, no save.</td></tr>
+        <tr class="neutral"><td>76</td><td>Bonnie's spell fires. She also casts Toll the Dead on a random nearby creature as a free action.</td></tr>
+        <tr class="neutral"><td>77</td><td>All creatures within 30 feet feel a sudden certainty that they will die today. No mechanical effect. Just the feeling.</td></tr>
+        <tr class="neutral"><td>78</td><td>The spell fires. Bonnie gains advantage on all death saving throws for 24 hours.</td></tr>
+        <tr class="neutral"><td>79</td><td>A spectral hand made of shadow reaches from the ground and grapples the nearest creature to Bonnie. DC 15 Strength to escape. The hand disappears after 1 minute.</td></tr>
+        <tr class="neutral"><td>80</td><td>The spell fires at full power with no side effects. Bonnie's hands are cold to the touch for 1 hour.</td></tr>
+        <tr class="neutral"><td>81</td><td>All creatures within 60 feet that have 25 or fewer hit points must make a DC 15 Constitution saving throw or drop to 0.</td></tr>
+        <tr class="neutral"><td>82</td><td>Bonnie casts Speak with Dead without expending a spell slot. She must use it within 1 minute or the effect fades.</td></tr>
+        <tr class="neutral"><td>83</td><td>The spell fires. The target is outlined in black flame for 1 minute — all attacks against them have advantage.</td></tr>
+        <tr class="neutral"><td>84</td><td>Bonnie's movement doesn't trigger opportunity attacks for 1 hour.</td></tr>
+        <tr class="neutral"><td>85</td><td>The spell fires. All creatures that witness it must make a DC 13 Wisdom saving throw or be shaken — disadvantage on their next attack roll.</td></tr>
+        <tr class="neutral"><td>86</td><td>Bonnie casts Blight as a free action on a random target within range.</td></tr>
+        <tr class="neutral"><td>87</td><td>The spell fires normally. Bonnie's shadow moves independently for 1 hour, acting curious and exploring nearby surfaces.</td></tr>
+        <tr class="neutral"><td>88</td><td>All spell damage Bonnie deals is converted to necrotic for 1 hour.</td></tr>
+        <tr class="neutral"><td>89</td><td>The spell fires. One creature of Bonnie's choice within 60 feet regains 4d10 hit points as death energy flows around rather than through them.</td></tr>
+        <tr class="neutral"><td>90</td><td>Bonnie becomes aware of every creature within 1 mile that is at 0 hit points or making death saving throws. She knows their exact location.</td></tr>
+        <tr class="neutral"><td>91</td><td>The spell fires at full power. Bonnie takes 2d10 necrotic but her next spell costs no slot.</td></tr>
+        <tr class="neutral"><td>92</td><td>All magical darkness within 120 feet is dispelled. The spell fires normally.</td></tr>
+        <tr class="neutral"><td>93</td><td>The spell fires. The target must succeed on a DC 16 Constitution saving throw or their hit point maximum is reduced by 5 until they finish a long rest.</td></tr>
+        <tr class="neutral"><td>94</td><td>Bonnie's next spell ignores resistance and immunity to necrotic damage.</td></tr>
+        <tr class="neutral"><td>95</td><td>The spell fires at full power. A second identical spell fires simultaneously from Bonnie's other hand at no additional cost.</td></tr>
+        <tr class="neutral"><td>96</td><td>All undead within 60 feet are turned as if Bonnie had used Turn Undead, regardless of whether she has that ability.</td></tr>
+        <tr class="neutral"><td>97</td><td>The spell fires. Bonnie gains temporary hit points equal to twice the damage dealt.</td></tr>
+        <tr class="neutral"><td>98</td><td>The spell fires with no side effects.</td></tr>
+        <tr class="neutral"><td>99</td><td>The spell fires at full power, affects all valid targets in range simultaneously, and costs no spell slot. Ravens fill the air. The temperature drops.</td></tr>
+
+        <tr class="section-header"><td colspan="2">The Raven Queen — 100</td></tr>
+
+        <tr class="raven"><td>100</td><td>The wild magic stills. Every hostile entity within 60 feet must make a DC 22 Constitution saving throw or die instantly, their life force pulled into Bonnie's hands like thread. For each creature that dies this way, Bonnie may choose one ally and restore them to full hit points. Around Bonnie, every raven within a mile lands and goes silent.</td></tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Roll a d100 whenever Bonnie casts a spell and the DM calls for it.<br>
+    <span>Below 20, the First God stirs. At 100, her mother watches.</span>
+  </div>
+
+</div>
+<div class="roller">
+  <div class="roll-history" id="rollHistory"></div>
+  <div class="roll-result" id="rollResult" style="display:none;"></div>
+  <button class="roll-btn" onclick="rollD100()">Roll d100</button>
+</div>
+
+<script>
+  const history = [];
+
+  function getClass(roll) {
+    if (roll <= 19) return 'catastrophic';
+    if (roll <= 59) return 'dark';
+    if (roll <= 99) return 'neutral';
+    return 'raven';
+  }
+
+  function scrollToRow(roll) {
+    document.querySelectorAll('tr.highlighted').forEach(r => r.classList.remove('highlighted'));
+    const rows = document.querySelectorAll('tbody tr:not(.section-header)');
+    for (const row of rows) {
+      const cell = row.querySelector('td:first-child');
+      if (cell && parseInt(cell.textContent.trim()) === roll) {
+        row.classList.add('highlighted');
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        break;
+      }
+    }
+  }
+
+  function rollD100() {
+    const roll = Math.floor(Math.random() * 100) + 1;
+    const cls = getClass(roll);
+
+    // Update main result display
+    const resultEl = document.getElementById('rollResult');
+    resultEl.style.display = 'block';
+    resultEl.className = 'roll-result ' + cls;
+    resultEl.textContent = roll;
+
+    // Add to history
+    history.unshift({ roll, cls });
+
+    // Rebuild history display
+    const historyEl = document.getElementById('rollHistory');
+    historyEl.innerHTML = '';
+    history.forEach(({ roll: r, cls: c }) => {
+      const item = document.createElement('div');
+      item.className = 'history-item ' + c;
+      item.textContent = r;
+      item.onclick = () => scrollToRow(r);
+      historyEl.appendChild(item);
+    });
+
+    scrollToRow(roll);
+  }
+</script>
+
+</body></html>
